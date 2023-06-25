@@ -63,3 +63,33 @@
             return $this->_conn;
         }
     }
+
+
+    /**
+     * Classe para gerenciamento do banco de dados MySQL (mysql)
+     */
+    
+    class mysql extends BancoDados {
+        public function __construct() {
+            $this->_tipo = 'mysql';
+        }
+
+        public function Conectar() {
+            $_strconn = "host={$this->_servidor} ";
+
+            if ($this->_porta !== null && $this->_porta !== "") {
+                $_strconn .= "port={$this->_porta} ";
+            }
+
+            $_strconn .= "dbname={$this->_banco} ";
+            $_strconn .= "user={$this->_usuario} ";
+
+            if ($this->_senha !== null && $this->_senha !== "") {
+                $_strconn .= "password={$this->_senha} ";
+            }
+
+            $this->_conn = mysqli_connect($_strconn);
+            return $this->_conn;
+        }
+    }
+
