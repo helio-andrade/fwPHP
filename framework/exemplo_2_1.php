@@ -9,8 +9,8 @@
     $_bd = new pgsql();
     $_bd->setServidor('localhost');
     $_bd->setPorta(5432);
-    $_bd->setBanco('nome_do_banco'); 
-    $_bd->setUsuario('usuario');
-    $_bd->setSenha('senha');
+    $_bd->setBanco('siteweb'); 
+    $_bd->setUsuario('postgres');
+    $_bd->setSenha('');
 
     var_dump($_bd->Conectar());

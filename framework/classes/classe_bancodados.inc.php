@@ -55,7 +55,7 @@
             $_strconn .= "dbname={$this->_banco} ";
             $_strconn .= "user={$this->_usuario} ";
             
-            if ($this->_senha !== null){
+            if ($this->_senha !== null && $this->_senha !== ""){
                 $_strconn .= "password={$this->_senha} ";
             }
 
