@@ -3,30 +3,33 @@
      * Exemplo de utilização do método executaSQL
      * 
      */
-
     include_once("classes/classe_bancodados.inc.php");
 
-    $_bd = new Pgsql();
-    $_bd->setServidor('localhost');
-    $_bd->setPorta(5432);
-    $_bd->setBanco('siteweb'); 
-    $_bd->setUsuario('postgres');
-    $_bd->setSenha('');
-    $_bd->conectar();
+    $servidor = 'localhost';
+    $porta = 5432;
+    $banco = 'siteweb';
+    $usuario = 'postgres';
+    $senha = '';
 
-    // var_dump($_bd->conectar());
+    $_bd = new Pgsql();
+    $_bd->setServidor($servidor);
+    $_bd->setPorta($porta);
+    $_bd->setBanco($banco); 
+    $_bd->setUsuario($usuario);
+    $_bd->setSenha($senha);
+    $_bd->conectar();
 
     if (isset($_POST['tabela'])) {
         $tabela = $_POST['tabela'];
 
-        $_sql = "CREATE TABLE IF NOT EXISTS $tabela (
+        $sql = "CREATE TABLE IF NOT EXISTS $tabela (
                     codigo      INT DEFAULT 0, 
                     descricao   VARCHAR(20),
                     valor       FLOAT,
                     PRIMARY KEY (codigo)
                 )";
         
-        if ($_bd->executaSQL($_sql)) {
+        if ($_bd->executaSQL($sql)) {
             echo "Tabela `$tabela` criada com sucesso! <br />";
         } else {
             echo "Erro ao criar tabela. <br />";
