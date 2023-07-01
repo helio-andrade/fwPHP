@@ -13,7 +13,9 @@
         protected $_banco;
         protected $_conn = false;
 
-        abstract public function Conectar();
+        abstract public function conectar();
+
+        abstract public function executaSQL($_sql);
 
         public function setServidor($servidor){
             $this->_servidor = $servidor;
@@ -34,18 +36,18 @@
         public function setBanco($banco){
             $this->_banco = $banco;
         }
-    }
+    } // Fim da classe BancoDados
 
     /**
      * Classe para gerenciamento do banco de dados PostgreSQL (pgsql)
      */
     
-    class pgsql extends BancoDados{
+    class Pgsql extends BancoDados{
         public function __construct(){
             $this->_tipo = 'pgsql';
         }
 
-        public function Conectar(){
+        public function conectar(){
             $_strconn = "host={$this->_servidor} ";
 
             if ($this->_porta !== null && $this->_porta !== ""){
@@ -62,19 +64,36 @@
             $this->_conn = pg_connect($_strconn);
             return $this->_conn;
         }
-    }
+
+        public function executaSQL($_sql) {
+            if ($this->_conn !== false) {
+                $_res = pg_query($this->_conn, $_sql);
+        
+                if ($_res !== false) {
+                    return $_res;
+                } else {
+                    // Lidar com erro na execução da consulta
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }        
+        
+    } 
 
 
     /**
      * Classe para gerenciamento do banco de dados MySQL (mysql)
      */
     
-    class mysql extends BancoDados {
+    class Mysql extends BancoDados {
+
         public function __construct() {
             $this->_tipo = 'mysql';
         }
 
-        public function Conectar() {
+        public function conectar() {
             $_strconn = "host={$this->_servidor} ";
 
             if ($this->_porta !== null && $this->_porta !== "") {
@@ -91,5 +110,14 @@
             $this->_conn = mysqli_connect($_strconn);
             return $this->_conn;
         }
-    }
 
+        public function executaSQL($_sql) {
+            if ($this->_conn !== false) {
+                $_res = mysqli_query($this->_conn, $_sql);
+                return $_res;
+            } else {
+                return false;
+            }
+        }
+        
+    }

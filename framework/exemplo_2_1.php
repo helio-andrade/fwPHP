@@ -13,4 +13,4 @@
     $_bd->setUsuario('postgres');
     $_bd->setSenha('');
 
-    var_dump($_bd->Conectar());
+    var_dump($_bd->conectar());
