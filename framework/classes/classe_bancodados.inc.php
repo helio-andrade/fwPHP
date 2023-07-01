@@ -61,7 +61,7 @@
                 $_strconn .= "password={$this->_senha} ";
             }
 
-            $this->_conn = pg_connect($_strconn);
+            $this->_conn = @pg_connect($_strconn);
             return $this->_conn;
         }
 
