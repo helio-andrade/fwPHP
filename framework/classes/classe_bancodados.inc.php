@@ -17,6 +17,18 @@
 
         abstract public function executaSQL($_sql);
 
+        public function startTransaction() {
+            $this->executaSQL('START TRANSACTION');
+        }
+
+        public function commit() {
+            $this->executaSQL('COMMIT');
+        }
+
+        public function rollback() {
+            $this->executaSQL('ROLLBACK');
+        }
+
         public function setServidor($servidor){
             $this->_servidor = $servidor;
         }
