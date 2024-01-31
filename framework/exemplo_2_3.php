@@ -1,27 +1,40 @@
 <?php
-	/**
-	 *  Exemplo de utilização do controle de transações
-	 *  1.o executamos mudanças permanentes
-	 * */
+/**
+ * Exemplo de utilização do controle de transações
+ * 1. Executamos mudanças permanentes
+ */
 
-	include_once("classes/classe_bancodados.inc.php");
+include_once("classes/classe_bancodados.inc.php");
 
-	$servidor = 'localhost';
-	$porta = 5432;
-	$banco = 'siteweb';
-	$usuario = 'postgres';
-	$senha = '';
+// Configurações do banco de dados
+$config = [
+    'servidor' => 'localhost',
+    'porta' => 5432,
+    'banco' => 'siteweb',
+    'usuario' => 'postgres',
+    'senha' => '',
+];
 
-	$_bd = new Pgsql();
-	$_bd->setServidor($servidor);
-	$_bd->setPorta($porta);
-	$_bd->setBanco($banco);
-	$_bd->setUsuario($usuario);
-	$_bd->setSenha($senha);
-	$_bd->conectar();
+// Criando uma instância da classe Pgsql e configurando-a
+$_bd = new Pgsql();
+$_bd->setServidor($config['servidor'])
+    ->setPorta($config['porta'])
+    ->setBanco($config['banco'])
+    ->setUsuario($config['usuario'])
+    ->setSenha($config['senha'])
+    ->conectar();
 
-	$_bd->startTransaction();
-	$_sql = "insert into tab_teste values(10, 'teste 10', 15.1)";
-	$_bd->executaSQL($_sql);
-	$_bd->commit();
+// Iniciando transação
+$_bd->startTransaction();
+
+// Consulta SQL para inserir dados
+$_sql = "INSERT INTO tab_teste (codigo, descricao, valor) VALUES (12, '{Teste 10}', 15)";
+
+var_dump($_sql);
+
+// Executando a consulta SQL
+$_bd->executaSQL($_sql);
+
+// Confirmar transação
+$_bd->commit();
 ?>
