@@ -5,30 +5,34 @@
  */
 include_once("classes/classe_bancodados.inc.php");
 
-$servidor = 'localhost';
-$porta = 5432;
-$banco = 'siteweb';
-$usuario = 'postgres';
-$senha = '';
+// Definições de conexão
+$configuracao = [
+    'servidor' => 'localhost',
+    'porta' => 3306,
+    'banco' => 'siteweb',
+    'usuario' => 'root',
+    'senha' => 'root'
+];
 
-$_bd = new Pgsql();
-$_bd->setServidor($servidor);
-$_bd->setPorta($porta);
-$_bd->setBanco($banco);
-$_bd->setUsuario($usuario);
-$_bd->setSenha($senha);
+// Instanciando a classe de banco de dados MySQL
+$_bd = new Mysql();
+$_bd->setServidor($configuracao['servidor'])
+    ->setPorta($configuracao['porta'])
+    ->setBanco($configuracao['banco'])
+    ->setUsuario($configuracao['usuario'])
+    ->setSenha($configuracao['senha']);
 $_bd->conectar();
 
 $mensagem = '';
 
-if (isset($_POST['tabela'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tabela'])) {
     $tabela = $_POST['tabela'];
 
+    // Criando tabela se não existir
     $sql = "CREATE TABLE IF NOT EXISTS $tabela (
-                codigo      INT DEFAULT 0, 
+                codigo      INT AUTO_INCREMENT PRIMARY KEY, 
                 descricao   VARCHAR(20),
-                valor       FLOAT,
-                PRIMARY KEY (codigo)
+                valor       FLOAT
             )";
 
     if ($_bd->executaSQL($sql)) {
@@ -37,19 +41,19 @@ if (isset($_POST['tabela'])) {
         $mensagem .= "<div class=\"mensagem mensagem-error\">Erro ao criar tabela.</div>";
     }
 
-    $registros = array(
-        array(1, 'Livro PHP', 45.80),
-        array(2, 'Livro Java', 100.80),
-        array(3, 'Python', 35.22),
-        array(4, 'C++', 25,69)
-    );
+    // Inserindo registros de exemplo
+    $registros = [
+        ['Livro PHP', 45.80],
+        ['Livro Java', 100.80],
+        ['Python', 35.22],
+        ['C++', 25.69]
+    ];
 
     foreach ($registros as $registro) {
-        $codigo = $registro[0];
-        $descricao = $registro[1];
-        $valor = $registro[2];
+        $descricao = $registro[0];
+        $valor = $registro[1];
 
-        $sql = "INSERT INTO $tabela VALUES ($codigo, '$descricao', $valor)";
+        $sql = "INSERT INTO $tabela (descricao, valor) VALUES ('$descricao', $valor)";
         if ($_bd->executaSQL($sql)) {
             $mensagem .= "<div class=\"mensagem mensagem-success\">Registro inserido!</div>";
         } else {

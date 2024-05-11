@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe para gerenciamento do banco de dados PostgreSQL (pgsql)
+ * Classe abstrata para gerenciamento do banco de dados
  * @abstract
  */
 abstract class BancoDados {
@@ -118,7 +118,7 @@ class Mysql extends BancoDados {
             $_strconn .= "password={$this->_senha} ";
         }
 
-        $this->_conn = mysqli_connect($_strconn);
+        $this->_conn = mysqli_connect($this->_servidor, $this->_usuario, $this->_senha, $this->_banco, $this->_porta);
         return $this->_conn;
     }
 

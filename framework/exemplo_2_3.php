@@ -9,14 +9,14 @@ include_once("classes/classe_bancodados.inc.php");
 // Configurações do banco de dados
 $config = [
     'servidor' => 'localhost',
-    'porta' => 5432,
+    'porta' => 3306,
     'banco' => 'siteweb',
-    'usuario' => 'postgres',
-    'senha' => '',
+    'usuario' => 'root',
+    'senha' => 'root',
 ];
 
-// Criando uma instância da classe Pgsql e configurando-a
-$_bd = new Pgsql();
+// Criando uma instância da classe Mysql e configurando-a
+$_bd = new Mysql();
 $_bd->setServidor($config['servidor'])
     ->setPorta($config['porta'])
     ->setBanco($config['banco'])
@@ -27,14 +27,36 @@ $_bd->setServidor($config['servidor'])
 // Iniciando transação
 $_bd->startTransaction();
 
-// Consulta SQL para inserir dados
-$_sql = "INSERT INTO tab_teste (codigo, descricao, valor) VALUES (12, '{Teste 10}', 15)";
+try {
+    // Consulta SQL para criar a tabela tab_teste
+    $sql_create_table = "
+        CREATE TABLE IF NOT EXISTS tab_teste (
+            codigo INT AUTO_INCREMENT PRIMARY KEY,
+            descricao VARCHAR(255),
+            valor FLOAT
+        )
+    ";
 
-var_dump($_sql);
+    // Executando a consulta SQL para criar a tabela
+    $_bd->executaSQL($sql_create_table);
 
-// Executando a consulta SQL
-$_bd->executaSQL($_sql);
+    // Consulta SQL para inserir dados
+    $codigo = 12;
+    $descricao = '{Teste 10}';
+    $valor = 15;
+    $sql_insert_data = "INSERT INTO tab_teste (codigo, descricao, valor) VALUES ($codigo, '$descricao', $valor)";
 
-// Confirmar transação
-$_bd->commit();
+    // Executando a consulta SQL para inserir os dados
+    $_bd->executaSQL($sql_insert_data);
+
+    // Confirmar transação
+    $_bd->commit();
+
+    echo "Transação concluída com sucesso!";
+} catch (Exception $e) {
+    // Rolback da transação em caso de erro
+    $_bd->rollback();
+
+    echo "Erro ao executar transação: " . $e->getMessage();
+}
 ?>
