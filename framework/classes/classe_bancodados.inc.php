@@ -61,7 +61,7 @@ abstract class BancoDados {
         if (substr(trim(strtolower($_sql)),0,6) == 'select'){
 
             // Guardamos o dataset
-            $this->_dataset = $_res;
+            $this->_dataset = mysqli_query($this->_conn, $_sql);
 
             // Buscamos o número de registros no dataset
             $this->setNumRows();
@@ -114,7 +114,8 @@ class Mysql extends BancoDados {
     }
 
     protected function setNumRows(){
-        $this->_numrows = ($this->_dataset != false ? mysqli_num_rows($this->_dataset) : 0);
+        $this->_numrows = mysqli_num_rows($this->_dataset);
     }
+
 }
 ?>
