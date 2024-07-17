@@ -1,25 +1,25 @@
 <?php
-/**
- * Exemplo de utilização da classe banco de dados
- * e suas descendentes
- */
+    /**
+     * Exemplo de utilização da classe banco de dados
+     * e suas descendentes
+     */
 
-include_once("classes/DataBase.php");
+    include_once("classes/classe_bancodados.inc.php");
 
-$servidor = isset($_POST['servidor']) ? $_POST['servidor'] : 'localhost';
-$porta = isset($_POST['porta']) ? $_POST['porta'] : 3306;
-$banco = isset($_POST['banco']) ? $_POST['banco'] : 'siteweb';
-$usuario = isset($_POST['usuario']) ? $_POST['usuario'] : 'root';
-$senha = isset($_POST['senha']) ? $_POST['senha'] : 'root';
+    $servidor = isset($_POST['servidor']) ? $_POST['servidor'] : 'localhost';
+    $porta = isset($_POST['porta']) ? $_POST['porta'] : 5432;
+    $banco = isset($_POST['banco']) ? $_POST['banco'] : 'siteweb';
+    $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : 'postgres';
+    $senha = isset($_POST['senha']) ? $_POST['senha'] : '';
 
-$_bd = new MySQL();
-$_bd->setServer($servidor);
-$_bd->setPort($porta);
-$_bd->setDatabase($banco); 
-$_bd->setUsername($usuario);
-$_bd->setPassword($senha);
+    $_bd = new Pgsql();
+    $_bd->setServidor($servidor);
+    $_bd->setPorta($porta);
+    $_bd->setBanco($banco); 
+    $_bd->setUsuario($usuario);
+    $_bd->setSenha($senha);
 
-$conectado = $_bd->connect();
+    $conectado = $_bd->conectar();
 ?>
 
 <!DOCTYPE html>
@@ -94,19 +94,19 @@ $conectado = $_bd->connect();
     <h2>Configurações do Banco de Dados</h2>
     <form method="POST" action="">
         <label for="servidor">Servidor:</label>
-        <input type="text" id="servidor" name="servidor" value="<?= htmlspecialchars($servidor) ?>"><br>
+        <input type="text" id="servidor" name="servidor" value="<?= $servidor ?>"><br>
 
         <label for="porta">Porta:</label>
-        <input type="number" id="porta" name="porta" value="<?= htmlspecialchars($porta) ?>"><br>
+        <input type="number" id="porta" name="porta" value="<?= $porta ?>"><br>
 
         <label for="banco">Banco de Dados:</label>
-        <input type="text" id="banco" name="banco" value="<?= htmlspecialchars($banco) ?>"><br>
+        <input type="text" id="banco" name="banco" value="<?= $banco ?>"><br>
 
         <label for="usuario">Usuário:</label>
-        <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario) ?>"><br>
+        <input type="text" id="usuario" name="usuario" value="<?= $usuario ?>"><br>
 
         <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" value="<?= htmlspecialchars($senha) ?>"><br>
+        <input type="password" id="senha" name="senha" value="<?= $senha ?>"><br>
 
         <button type="submit">Conectar</button>
     </form>

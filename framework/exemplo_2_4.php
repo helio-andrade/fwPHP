@@ -29,7 +29,7 @@
 	    $_bd->startTransaction();
 
 	    // Consulta SQL para inserir dados
-	    $_sql_insert = "INSERT INTO tab_teste VALUES (11, 'teste 11', 21.7)";
+	    $_sql_insert = "INSERT INTO tab_teste VALUES (100, 'teste 11', 21.7)";
 	    $_bd->executaSQL($_sql_insert);
 
 	    // Consulta SQL para excluir dados
