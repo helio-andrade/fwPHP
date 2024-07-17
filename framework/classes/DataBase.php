@@ -129,26 +129,34 @@
         }
 
         public function connect() {
-            $this->connection = mysqli_connect($this->server, $this->username, $this->password, $this->database, $this->port);
-
-            if ($this->connection === false) {
-                $this->lastError = 'Erro ao conectar ao banco de dados: ' . mysqli_connect_error();
-                die($this->lastError);
+            try {
+                $this->connection = mysqli_connect($this->server, $this->username, $this->password, $this->database, $this->port);
+                if ($this->connection === false) {
+                    throw new mysqli_sql_exception(mysqli_connect_error(), mysqli_connect_errno());
+                }
+            } catch (mysqli_sql_exception $e) {
+                $this->lastError = 'Erro ao conectar ao banco de dados: ' . $e->getMessage();
+                return false;
             }
 
             return $this->connection;
         }
 
         public function executeQuery($sql) {
-            if ($this->connection !== false) {
-                $result = mysqli_query($this->connection, $sql);
-                if ($result === false) {
-                    $this->lastError = 'Erro ao executar SQL: ' . mysqli_error($this->connection);
-                    error_log($this->lastError);
-                } else {
-                    return $this->isSelectQuery($sql);
+            try {
+                if ($this->connection !== false) {
+                    $result = mysqli_query($this->connection, $sql);
+                    if ($result === false) {
+                        throw new mysqli_sql_exception(mysqli_error($this->connection));
+                    } else {
+                        return $this->isSelectQuery($sql);
+                    }
                 }
+            } catch (mysqli_sql_exception $e) {
+                $this->lastError = 'Erro ao executar o comando SQL: ' . $e->getMessage();
+                error_log($this->lastError);
             }
+            
             return false;
         }
 

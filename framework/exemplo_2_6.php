@@ -11,5 +11,6 @@
         ->setUsername('root')
         ->setPassword('root');
 
-    $database->connect();
+    $database->connect() or die($database->getLastError());
+
 ?>
