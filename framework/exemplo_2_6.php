@@ -1,4 +1,8 @@
 <?php
+    /**
+     *  Exemplo de tratamento de exceção na conexão
+     *  com o banco de dados. * 
+     */
     include_once("classes/DataBase.php");
 
     // Instanciando a classe de banco de dados MySQL
