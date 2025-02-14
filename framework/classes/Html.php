@@ -4,33 +4,32 @@
  */
 
 class TipoTag {
-	protected $nome;
-	protected $finaliza = true;
+    private string $nome;
+    private bool $finaliza;
 
-	public function __construct($nome, $finaliza) {
-		$this->nome = $nome;
-		$this->finaliza = (bool) $finaliza;
-	}
+    public function __construct(string $nome, bool $finaliza = true) {
+        $this->nome = $nome;
+        $this->finaliza = $finaliza;
+    }
 
-	public function getNome() {
-		return $this->nome;
-	}
+    public function getNome(): string {
+        return $this->nome;
+    }
 
-	public function getFinaliza() {
-		return (bool) $this->finaliza;
-	}
+    public function getFinaliza(): bool {
+        return $this->finaliza;
+    }
 }
 
-
 class TiposPadrao {
-    private $tipos = array();
+    private array $tipos = [];
 
     public function __construct() {
         $this->inicializa();
     }
 
-    public function inicializa() {
-        $this->tipos = array(
+    private function inicializa(): void {
+        $this->tipos = [
             'a' => new TipoTag("a"),
             'area' => new TipoTag("area", false),
             'base' => new TipoTag("base", false),
@@ -62,13 +61,31 @@ class TiposPadrao {
             'th' => new TipoTag("th"),
             'title' => new TipoTag("title"),
             'tr' => new TipoTag("tr")
-        );
+        ];
     }
 
-    public function getTipo($tipo) {
-        return isset($this->tipos[$tipo]) ? $this->tipos[$tipo] : null;
+    public function getTipo(string $tipo): ?TipoTag {
+        return $this->tipos[$tipo] ?? null;
     }
 }
 
+/**
+ * Define um Atributo para o marcador HTML relacionado
+ */
+class Atributo {
+    private string $nome;
+    private ?string $valor;
 
+    public function __construct(string $nome, ?string $valor = null) {
+        $this->nome = $nome;
+        $this->valor = $valor;
+    }
+
+    public function getAtributo(): string {
+        // Formato: atributo.nome[=atributo.valor]
+        return $this->valor !== null 
+            ? "{$this->nome}=\"{$this->valor}\"" 
+            : $this->nome;
+    }
+}
 ?>
