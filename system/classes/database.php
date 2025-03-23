@@ -10,7 +10,7 @@ abstract class Database
     protected $username;
     protected $password;
     protected $database;
-    protected $connection;
+    protected $connection = null;
 
     abstract public function connect();
     abstract public function executeSQL($sql);
@@ -66,11 +66,10 @@ class MySQL extends Database
 
     public function executeSQL($sql)
     {
-        if ($this->connection !== false) {
+        if ($this->connection instanceof mysqli) {
             $result = $this->connection->query($sql);  
             return $result;  
-        }
-        else {
+        } else {
             return false;
         }
     }
