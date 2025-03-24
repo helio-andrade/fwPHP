@@ -4,7 +4,8 @@ include_once(__DIR__ . '/../../system/classes/Database.php');
 
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $tableName = $_POST['tableName'] ?? 'tab_teste';
+    $tableName = trim($_POST['tableName'] ?? '');
+
     $mysql = new MySQL();
     $mysql->setHost('localhost');
     $mysql->setDatabase('siteweb');
@@ -18,13 +19,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($checkResult && $checkResult->num_rows > 0) {
         $message = "A tabela {$tableName} já existe!";
     } else {
-        $createSQL = "CREATE TABLE IF NOT EXISTS {$tableName} (
-            codigo INT AUTO_INCREMENT PRIMARY KEY, 
+        $createTable = "CREATE TABLE IF NOT EXISTS {$tableName} (
+            codigo INT AUTO_INCREMENT PRIMARY KEY,
             descricao VARCHAR(20),
             valor FLOAT
         )";
-        if ($mysql->executeSQL($createSQL)) {
-            $message = "Tabela {$tableName} criada com sucesso!";
+        if ($mysql->executeSQL($createTable)) {
+            $message = "Tabela <b>{$tableName}</b> criada com sucesso!";
+
+            $registros = [
+                ['Livro PHP', 45.80],
+                ['Livro Java', 100.80],
+                ['Python', 35.22],
+                ['C++', 25.69],
+                ['Linguagem C', 47.89],
+                ['C++ Builder', 99.99]
+            ];
+
+            foreach ($registros as $registro) {
+                $desc = $registro[0];
+                $val = $registro[1];
+                $insertData = "INSERT INTO {$tableName} (descricao, valor) VALUES ('$desc', $val)";
+                $mysql->executeSQL($insertData);
+            }
+
+            $message .= " <br>Dados inseridos com sucesso!";
         }
     }
 }
@@ -39,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <form method="post">
         <label for="tableName">Nome da Tabela:</label>
-        <input type="text" name="tableName" id="tableName" />
+        <input type="text" name="tableName" id="tableName" required />
         <button type="submit">Criar Tabela</button>
     </form>
 
